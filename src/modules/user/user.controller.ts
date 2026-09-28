@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { sendResponse } from "../../utils/sendResponse"
 import userService from "./user.service"
+import { signToken } from "../../utils/jwt";
 
 export const signup = async (req: Request, res: Response) => {
     const user = await userService.craeteUser(req.body)
@@ -20,7 +21,17 @@ export const login = async (req: Request, res: Response) => {
         return
     }
 
+    const { accessToken, refreshToken } = signToken(user)
+
+    res.cookie("refreshToken", refreshToken, {
+        sameSite: "lax",
+        httpOnly: true,
+        secure: false
+    })
+
     const result = {
+        accessToken,
+        refreshToken,
         id: user.id,
         name: user.name,
         email: user.email,
