@@ -3,7 +3,7 @@ import type { RUser, User } from "../../types";
 import bcrypt from "bcrypt"
 
 class UserService {
-    async craeteUser(user: RUser & { password: string }) {
+    async createUser(user: RUser & { password: string }) {
         const { name, email, role, password } = user;
 
         const hash = await bcrypt.hash(password, 10);

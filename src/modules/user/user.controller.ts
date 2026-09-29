@@ -4,7 +4,7 @@ import userService from "./user.service"
 import { signToken } from "../../utils/jwt";
 
 export const signup = async (req: Request, res: Response) => {
-    const user = await userService.craeteUser(req.body)
+    const user = await userService.createUser(req.body)
     if (!user) {
         sendResponse(res, { message: "Failed to create user" }, 400)
         return
