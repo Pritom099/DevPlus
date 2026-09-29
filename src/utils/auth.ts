@@ -7,20 +7,9 @@ export const auth = (
     res: Response,
     next: NextFunction
 ) => {
-    const authorization = req.headers.authorization;
+    const token = req.headers.authorization;
 
-    if (!authorization) {
-        sendResponse(
-            res,
-            { message: "Authorization token is required", error: true },
-            401
-        );
-        return;
-    }
-
-    const token = authorization.split(" ")[1];
-
-    if (!token) {
+      if (!token) {
         sendResponse(
             res,
             { message: "Invalid authorization format", error: true },
@@ -29,6 +18,7 @@ export const auth = (
         return;
     }
 
+  
     try {
         const user = verifyToken(token, "access");
         req.user = user;
