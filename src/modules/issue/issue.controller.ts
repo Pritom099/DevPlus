@@ -57,3 +57,22 @@ export const getIssueById = async (req: Request,res: Response) => {
         200
     );
 };
+
+export const updateIssue = async (req: Request,res: Response) => {
+    const id = Number(req.params.id);
+    const { title, description, type } = req.body;
+    const issue = await issueService.updateIssue(
+        id,
+        {
+            title,
+            description,
+            type
+        },
+        req.user
+    );
+
+    if (!issue) {sendResponse(res,{message: "Issue not found",error: true},404);
+        return;
+    }
+    sendResponse(res,{message: "Issue updated successfully", data: issue},200);
+};

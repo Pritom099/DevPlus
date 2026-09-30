@@ -120,6 +120,48 @@ class IssueService {
         };
     }
 
+    async updateIssue(id: number, data: { title: string; description: string; type: "bug" | "feature_request"; }, user: { id: number, role: string }) {
+        const issue = await sql`SELECT * FROM issues WHERE id = ${id}`;
+        const singleIssue = issue[0];
+        if (!singleIssue) {
+            return null;
+        }
+        if (user.role === "maintainer") {
+            const updatedIssue = await sql`
+            UPDATE issues
+            SET
+                title = ${data.title},
+                description = ${data.description},
+                type = ${data.type},
+                updated_at = NOW()
+            WHERE id = ${id}
+            RETURNING *
+        `;
+            return updatedIssue[0];
+        }
+        if (user.role === "contributor") {
+            if (singleIssue.reporter_id !== user.id) {
+                return null;
+            }
+
+            if (singleIssue.status !== "open") {
+                return null;
+            }
+            const updatedIssue = await sql`
+            UPDATE issues
+            SET
+                title = ${data.title},
+                description = ${data.description},
+                type = ${data.type},
+                updated_at = NOW()
+            WHERE id = ${id}
+            RETURNING *
+        `;
+            return updatedIssue[0];
+        }
+        return null;
+    }
+
 
 }
 
