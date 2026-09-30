@@ -1,6 +1,6 @@
  import { Router } from "express";
 import { auth } from "../../utils/auth";
-import { createIssue, getAllIssues } from "./issue.controller";
+import { createIssue, getAllIssues, getIssueById } from "./issue.controller";
 
  
  
@@ -8,6 +8,7 @@ import { createIssue, getAllIssues } from "./issue.controller";
  
  router.post("/issues",auth,createIssue)
  router.get("/issues",getAllIssues)
+ router.get("/issues/:id",getIssueById)
 
  
  export default router  

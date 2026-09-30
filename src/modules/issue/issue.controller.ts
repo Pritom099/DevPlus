@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import issueService from "./issue.service";
 import { sendResponse } from "../../utils/sendResponse";
 
-export const createIssue = async (req: Request,res: Response) => {
+export const createIssue = async (req: Request, res: Response) => {
     const { title, description, type } = req.body;
     const issue = await issueService.createIssue({
         title,
@@ -11,16 +11,16 @@ export const createIssue = async (req: Request,res: Response) => {
         reporter_id: req.user.id
     });
     sendResponse(
-        res,{
-            message: "Issue created successfully",
-            data: issue
-        },
+        res, {
+        message: "Issue created successfully",
+        data: issue
+    },
         201
     );
 };
 
 
-export const getAllIssues = async (req: Request,res: Response) => {
+export const getAllIssues = async (req: Request, res: Response) => {
     const { sort, type, status } = req.query;
     const issues = await issueService.getAllIssues({
         sort: sort as string,
@@ -32,6 +32,27 @@ export const getAllIssues = async (req: Request,res: Response) => {
         {
             message: "Issues retrived successfully",
             data: issues
+        },
+        200
+    );
+};
+
+export const getIssueById = async (req: Request,res: Response) => {
+    const id = Number(req.params.id);
+    const issue = await issueService.getIssueById(id);
+    if (!issue) {sendResponse(res,
+            {
+                message: "Issue not found",
+                error: true
+            },
+            404
+        );
+        return;
+    }
+    sendResponse(res,
+        {
+            message: "Issue retrieved successfully",
+            data: issue
         },
         200
     );

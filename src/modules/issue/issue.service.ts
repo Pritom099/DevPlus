@@ -97,7 +97,33 @@ class IssueService {
         return issuesWithReporter;
     }
 
+    async getIssueById(id: number) {
+        const issue = await sql`SELECT * FROM issues WHERE id = ${id}`;
+        const singleIssue = issue[0];
+        if (!singleIssue) {
+            return null;
+        }
+        const reporter = await sql`
+        SELECT id, name, role
+        FROM users
+        WHERE id = ${singleIssue.reporter_id}
+    `;
+        return {
+            id: singleIssue.id,
+            title: singleIssue.title,
+            description: singleIssue.description,
+            type: singleIssue.type,
+            status: singleIssue.status,
+            reporter: reporter[0],
+            created_at: singleIssue.created_at,
+            updated_at: singleIssue.updated_at
+        };
+    }
+
 
 }
+
+
+
 
 export default new IssueService();
