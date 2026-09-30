@@ -1,6 +1,6 @@
  import { Router } from "express";
 import { auth } from "../../utils/auth";
-import { createIssue, getAllIssues, getIssueById, updateIssue } from "./issue.controller";
+import { createIssue, deleteIssue, getAllIssues, getIssueById, updateIssue } from "./issue.controller";
 
  
  
@@ -10,6 +10,7 @@ import { createIssue, getAllIssues, getIssueById, updateIssue } from "./issue.co
  router.get("/issues",getAllIssues)
  router.get("/issues/:id",getIssueById)
  router.patch("/issues/:id",auth,updateIssue)
+ router.delete("/issues/:id",auth,deleteIssue)
 
  
  export default router  

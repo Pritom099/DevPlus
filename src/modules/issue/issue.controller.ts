@@ -37,10 +37,11 @@ export const getAllIssues = async (req: Request, res: Response) => {
     );
 };
 
-export const getIssueById = async (req: Request,res: Response) => {
+export const getIssueById = async (req: Request, res: Response) => {
     const id = Number(req.params.id);
     const issue = await issueService.getIssueById(id);
-    if (!issue) {sendResponse(res,
+    if (!issue) {
+        sendResponse(res,
             {
                 message: "Issue not found",
                 error: true
@@ -58,7 +59,7 @@ export const getIssueById = async (req: Request,res: Response) => {
     );
 };
 
-export const updateIssue = async (req: Request,res: Response) => {
+export const updateIssue = async (req: Request, res: Response) => {
     const id = Number(req.params.id);
     const { title, description, type } = req.body;
     const issue = await issueService.updateIssue(
@@ -71,8 +72,19 @@ export const updateIssue = async (req: Request,res: Response) => {
         req.user
     );
 
-    if (!issue) {sendResponse(res,{message: "Issue not found",error: true},404);
+    if (!issue) {
+        sendResponse(res, { message: "Issue not found", error: true }, 404);
         return;
     }
-    sendResponse(res,{message: "Issue updated successfully", data: issue},200);
+    sendResponse(res, { message: "Issue updated successfully", data: issue }, 200);
 };
+
+export const deleteIssue = async (req: Request, res: Response) => {
+    const id = Number(req.params.id);
+    const issue = await issueService.deleteIssue(id, req.user)
+    if (!issue) {
+        sendResponse(res, { message: "Issue not found or you don't have permission", error: true }, 404);
+        return;
+    }
+    sendResponse(res, { message: "Issue deleted successfullyy", data: issue }, 200);
+}

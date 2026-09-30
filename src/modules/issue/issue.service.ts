@@ -162,6 +162,23 @@ class IssueService {
         return null;
     }
 
+    async deleteIssue(id: number, user: { id: number, role: string }) {
+        const issue = await sql`SELECT * FROM issues WHERE id = ${id}`;
+        const singleIssue = issue[0];
+        if (!singleIssue) {
+            return null;
+        }
+        if (user.role === "maintainer") {
+            const deletedIssue = await sql`
+        DELETE FROM issues
+        WHERE id = ${id}
+        RETURNING *
+    `;
+            return deletedIssue[0];
+        }
+        return null;
+    }
+
 
 }
 
