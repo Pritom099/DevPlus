@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node dist/index.mjs",
     "dev": "tsx watch ./src/index.ts",
+    "build": "tsup",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -26,7 +28,8 @@
     "dotenv": "^18.0.4",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
-    "tsc": "^2.0.4",
-    "tsx": "^4.23.15"
+    "tsup": "^8.5.1",
+    "tsx": "^4.23.15",
+    "vercel": "^62.1.0"
   }
 }
